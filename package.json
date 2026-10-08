@@ -1,0 +1,29 @@
+{
+  "name": "github-mirror",
+  "version": "0.1.0",
+  "description": "Scaffold a GitHub repository that force-syncs from an upstream repo via GitHub Actions",
+  "type": "module",
+  "bin": {
+    "github-mirror": "bin/github-mirror.js"
+  },
+  "files": [
+    "bin",
+    "src"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "github",
+    "mirror",
+    "sync",
+    "cli",
+    "github-actions"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "@clack/prompts": "^0.11.0",
+    "commander": "^12.1.0",
+    "picocolors": "^1.1.1"
+  }
+}

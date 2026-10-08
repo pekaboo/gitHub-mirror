@@ -1,0 +1,55 @@
+name: Sync from upstream
+
+# Pulls the upstream repo and force-overwrites this repo's main branch,
+# then force-pushes. The .github directory is preserved so this workflow survives.
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: sync-from-upstream
+  cancel-in-progress: true
+
+# Repo variable (Settings → Secrets and variables → Actions) takes priority;
+# the fallback below keeps the workflow working out of the box.
+env:
+  UPSTREAM_REPO: ${{ vars.UPSTREAM_REPO || '__UPSTREAM_URL__' }}
+  TARGET_BRANCH: main
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout this repo
+        uses: actions/checkout@v5
+        with:
+          ref: ${{ env.TARGET_BRANCH }}
+          fetch-depth: 1
+
+      - name: Clone upstream repo
+        run: |
+          rm -rf /tmp/upstream
+          git clone --depth 1 "${UPSTREAM_REPO}" /tmp/upstream
+
+      - name: Force overwrite with upstream content
+        run: |
+          # --delete removes stale files; excluded dirs (.git/.github) are
+          # protected from deletion and not copied from upstream
+          rsync -a --delete --exclude='.git' --exclude='.github' /tmp/upstream/ ./
+          echo "--- Overwritten content ---"
+          ls -la
+
+      - name: Commit and force push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No changes to sync."
+            exit 0
+          fi
+          git commit -m "chore(sync): force overwrite from upstream ${UPSTREAM_REPO} at $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          git push --force origin "${TARGET_BRANCH}"
