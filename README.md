@@ -13,12 +13,28 @@ workflow as [wang-neo/github-tool-box](https://github.com/wang-neo/github-tool-b
 
 ## Install
 
+**One-line global install** (from the private repo — auth is pulled from `gh` automatically):
+
+```bash
+npm i -g "git+https://pekaboo:$(gh auth token --user pekaboo)@github.com/pekaboo/gitHub-mirror.git"
+```
+
+Requires `gh` logged in as pekaboo (`gh auth login`). After that, `github-mirror <repo>`
+works anywhere.
+
+**From a checkout (development):**
+
 ```bash
 git clone https://github.com/pekaboo/gitHub-mirror.git
 cd gitHub-mirror
 npm install
 npm link          # exposes the global `github-mirror` command
 ```
+
+> **Note on `npx`:** running this package via `npx <git-url>` is currently not
+> viable — the repo is private, and npm ≥ 11 `exec` mishandles git URLs with
+> embedded credentials (silent exit 128), while unauthenticated URLs cannot
+> clone a private repo. Use the one-line global install above instead.
 
 ## Requirements
 

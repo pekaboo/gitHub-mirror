@@ -1,5 +1,5 @@
 {
-  "name": "github-mirror",
+  "name": "@pekaboo/github-mirror",
   "version": "0.1.0",
   "description": "Scaffold a GitHub repository that force-syncs from an upstream repo via GitHub Actions",
   "type": "module",
