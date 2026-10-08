@@ -14,7 +14,7 @@ workflow as [wang-neo/github-tool-box](https://github.com/wang-neo/github-tool-b
 ## Install
 
 ```bash
-git clone https://github.com/wang-neo/gitHub-mirror.git
+git clone https://github.com/pekaboo/gitHub-mirror.git
 cd gitHub-mirror
 npm install
 npm link          # exposes the global `github-mirror` command
